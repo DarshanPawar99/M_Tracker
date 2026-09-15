@@ -1,17 +1,11 @@
 # Code style
 
-<!--
-REPLACE THIS COMMENT BLOCK with the full "Ponytail, lazy senior dev mode"
-text — everything from "You are a lazy senior developer" through
-"Trivial one-liners need no test."
-
-Source: https://github.com/DietrichGebert/ponytail
-Delete these lines once pasted.
--->
+Code style for this project comes from the `ponytail` plugin, enabled in
+`.claude/settings.json`. Do not restate its rules here.
 
 ## Project-specific
 
-This app stores personal health data. The rungs above do not apply to the
+This app stores personal health data. The ponytail rungs do not apply to the
 cycle-data schema, its storage layer, or any code that reads or writes it.
 Use the explicit, well-tested, boring approach there even when a shorter
 one exists.
@@ -24,4 +18,4 @@ Applies to:
 - Local storage, sync, and backup logic
 
 Everywhere else — UI, layout, charts, formatting, utilities, build config —
-the rungs above apply normally.
+ponytail applies normally.
