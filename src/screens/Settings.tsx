@@ -10,7 +10,8 @@ export default function Settings() {
 
   function switchTo(p: Profile, index: number) {
     choosePerson(p.id)
-    // Index 0 is the tracked person (her view); anyone else opens on her cycle.
+    // ponytail: same profiles[0]-is-tracked assumption as SignIn; a Profile.role
+    // field would replace the index convention if it ever stops holding.
     setView(index === 0 ? 'self' : 'partner')
   }
 

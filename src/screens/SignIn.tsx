@@ -40,7 +40,8 @@ export default function SignIn() {
         setError('That password doesn’t match.')
         return
       }
-      // Index 0 is the tracked person (her view); a partner opens on her cycle.
+      // ponytail: her/his split assumes profiles[0] is the tracked person;
+      // add a Profile.role field if a couple ever needs the roles the other way.
       setView(personId === her?.id ? 'self' : 'partner')
     } finally {
       setBusy(false)
