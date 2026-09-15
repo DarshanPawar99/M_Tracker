@@ -4,6 +4,13 @@
 export interface Profile {
   id: string
   name: string
+  /**
+   * Role in the shared account: 'tracked' is the person whose cycle is shown
+   * ("her view"), 'partner' is the follower ("his view"). The app keys the two
+   * views off this, never off profile order. Optional for rows predating the
+   * column — callers fall back to the first profile then.
+   */
+  role?: 'tracked' | 'partner' | null
   /** Hex accent color used across the wheel + charts for this person. */
   color: string
   /** Baseline cycle length (days) used until enough real data is logged. */

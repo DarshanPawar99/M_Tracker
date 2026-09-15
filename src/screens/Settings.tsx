@@ -2,17 +2,17 @@ import { useState } from 'react'
 import { SignOut } from '@phosphor-icons/react'
 import { useStore } from '../store'
 import { useSession } from '../session'
+import { trackedProfile } from '../lib/session'
 import type { Profile } from '../types'
 
 export default function Settings() {
   const { profiles, mode } = useStore()
   const { self, subject, choosePerson, setView, signOut } = useSession()
+  const her = trackedProfile(profiles) // tracked person, from role not order
 
-  function switchTo(p: Profile, index: number) {
+  function switchTo(p: Profile) {
     choosePerson(p.id)
-    // ponytail: same profiles[0]-is-tracked assumption as SignIn; a Profile.role
-    // field would replace the index convention if it ever stops holding.
-    setView(index === 0 ? 'self' : 'partner')
+    setView(p.id === her?.id ? 'self' : 'partner')
   }
 
   return (
@@ -21,8 +21,9 @@ export default function Settings() {
       <section>
         <div className="kicker pb-2.5">Signed in as</div>
         <div className="card" style={{ padding: 'var(--space-4)', gap: 'var(--space-3)' }}>
-          {profiles.map((p, i) => {
+          {profiles.map((p) => {
             const active = p.id === self?.id
+            const isTracked = p.id === her?.id
             return (
               <div key={p.id} className="flex items-center gap-2.5">
                 <span
@@ -36,10 +37,10 @@ export default function Settings() {
                 </span>
                 <div className="flex-1 text-[14px]">
                   {p.name.toLowerCase()}{' '}
-                  <span className="text-muted">· {i === 0 ? 'her view' : 'his view'}</span>
+                  <span className="text-muted">· {isTracked ? 'her view' : 'his view'}</span>
                 </div>
                 {!active && (
-                  <button className="tag tag-outline" onClick={() => switchTo(p, i)}>
+                  <button className="tag tag-outline" onClick={() => switchTo(p)}>
                     Switch
                   </button>
                 )}

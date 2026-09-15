@@ -4,6 +4,7 @@ import {
   createLock,
   partnerOf,
   subjectFor,
+  trackedProfile,
   verifyPassphrase,
 } from './session'
 
@@ -14,8 +15,8 @@ const base = {
   luteal_length: 14,
   created_at: '2026-01-01T00:00:00Z',
 }
-const aria: Profile = { id: 'aria', name: 'Aria', ...base }
-const sam: Profile = { id: 'sam', name: 'Sam', ...base }
+const aria: Profile = { id: 'aria', name: 'Aria', role: 'tracked', ...base }
+const sam: Profile = { id: 'sam', name: 'Sam', role: 'partner', ...base }
 const profiles = [aria, sam]
 
 describe('partner / subject selection', () => {
@@ -34,6 +35,19 @@ describe('partner / subject selection', () => {
 
   it('partner view falls back to self when alone', () => {
     expect(subjectFor([aria], 'aria', 'partner')).toBe(aria)
+  })
+})
+
+describe('tracked person (role, not order)', () => {
+  it('finds the tracked profile regardless of array order', () => {
+    expect(trackedProfile(profiles)).toBe(aria)
+    expect(trackedProfile([sam, aria])).toBe(aria) // reversed order, same answer
+  })
+
+  it('falls back to the first profile for legacy rows without a role', () => {
+    const a = { ...aria, role: undefined }
+    const s = { ...sam, role: undefined }
+    expect(trackedProfile([a, s])).toBe(a)
   })
 })
 

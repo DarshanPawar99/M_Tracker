@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { User, Eye, EyeSlash, Drop, Heart } from '@phosphor-icons/react'
 import { useStore } from '../store'
 import { useSession } from '../session'
+import { trackedProfile } from '../lib/session'
 
 /**
  * Shared-account sign-in: both names, one password. Picking who is on the phone
@@ -23,8 +24,9 @@ export default function SignIn() {
     if (!personId && profiles.length) setPersonId(profiles[0].id)
   }, [profiles, personId])
 
-  const her = profiles[0]
-  const him = profiles[1]
+  // Roles come from the profile's `role`, not array order (see lib/session).
+  const her = trackedProfile(profiles)
+  const him = profiles.find((p) => p.id !== her?.id)
 
   async function submit() {
     if (!personId) return
@@ -40,8 +42,7 @@ export default function SignIn() {
         setError('That password doesn’t match.')
         return
       }
-      // ponytail: her/his split assumes profiles[0] is the tracked person;
-      // add a Profile.role field if a couple ever needs the roles the other way.
+      // The tracked person opens on her own cycle; the partner opens on hers.
       setView(personId === her?.id ? 'self' : 'partner')
     } finally {
       setBusy(false)
@@ -117,9 +118,10 @@ export default function SignIn() {
       <div>
         <div className="mb-2 text-[12px] text-dim">Who is on this phone?</div>
         <div className="flex gap-2.5">
-          {profiles.map((p, i) => {
+          {profiles.map((p) => {
             const active = p.id === personId
-            const Icon = i === 0 ? Drop : Heart
+            const isTracked = p.id === her?.id
+            const Icon = isTracked ? Drop : Heart
             return (
               <button
                 key={p.id}
@@ -133,7 +135,7 @@ export default function SignIn() {
                   color: active ? 'var(--color-accent)' : 'var(--text-dim)',
                 }}
               >
-                <Icon size={15} weight={active && i === 0 ? 'fill' : 'regular'} />
+                <Icon size={15} weight={active && isTracked ? 'fill' : 'regular'} />
                 {p.name}
               </button>
             )

@@ -12,6 +12,16 @@ export function partnerOf(profiles: Profile[], selfId: string): Profile | null {
 }
 
 /**
+ * The tracked person — whose cycle is the account's "her view". Read from the
+ * explicit `role`, never from array position (co-seeded rows can tie on
+ * created_at, whose ordering is undefined). Falls back to the first profile
+ * only for legacy rows that predate the role column.
+ */
+export function trackedProfile(profiles: Profile[]): Profile | null {
+  return profiles.find((p) => p.role === 'tracked') ?? profiles[0] ?? null
+}
+
+/**
  * Whose cycle the screens display: the partner's in 'partner' (his) view, the
  * signed-in person's own in 'self' (her) view. Falls back to self when there is
  * no distinct partner (single-profile install).

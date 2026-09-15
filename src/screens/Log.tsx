@@ -44,6 +44,7 @@ export default function Log() {
   }
 
   function beginEdit(c: Cycle) {
+    if (!canEditNotes) return // partner view never edits existing history
     setEditing(c)
     setMode('custom')
     setStart(c.start_date)
@@ -206,18 +207,25 @@ export default function Log() {
                   </div>
                   <div className="text-[12px] text-muted">{meta}</div>
                 </div>
-                <button aria-label="Edit" onClick={() => beginEdit(c)} className="grid place-items-center p-1">
-                  <PencilSimple size={16} color="var(--color-accent)" />
-                </button>
-                <button
-                  aria-label="Delete"
-                  onClick={() => {
-                    if (confirm('Delete this period?')) deleteCycle(c.id)
-                  }}
-                  className="grid place-items-center p-1"
-                >
-                  <Trash size={16} color="var(--text-muted)" />
-                </button>
+                {/* Existing history is read-only in partner (his) view — a
+                    partner may add a period ("Log for …") but not rewrite or
+                    delete the tracked person's logged cycles. */}
+                {canEditNotes && (
+                  <>
+                    <button aria-label="Edit" onClick={() => beginEdit(c)} className="grid place-items-center p-1">
+                      <PencilSimple size={16} color="var(--color-accent)" />
+                    </button>
+                    <button
+                      aria-label="Delete"
+                      onClick={() => {
+                        if (confirm('Delete this period?')) deleteCycle(c.id)
+                      }}
+                      className="grid place-items-center p-1"
+                    >
+                      <Trash size={16} color="var(--text-muted)" />
+                    </button>
+                  </>
+                )}
               </div>
             )
           })

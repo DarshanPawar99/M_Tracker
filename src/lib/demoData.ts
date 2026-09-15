@@ -7,6 +7,7 @@ export const DEMO_PROFILES: Profile[] = [
   {
     id: 'demo-aria',
     name: 'Aria',
+    role: 'tracked',
     color: '#e11d48',
     default_cycle_length: 28,
     default_period_length: 5,
@@ -16,6 +17,7 @@ export const DEMO_PROFILES: Profile[] = [
   {
     id: 'demo-sam',
     name: 'Sam',
+    role: 'partner',
     color: '#6366f1',
     default_cycle_length: 30,
     default_period_length: 4,
