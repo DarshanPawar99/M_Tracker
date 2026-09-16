@@ -41,3 +41,8 @@ export function formatShort(date: Date): string {
 export function formatLong(date: Date): string {
   return format(date, 'd MMM yyyy')
 }
+
+/** Weekday + short date, e.g. "Tuesday 15 Sep". */
+export function formatWeekdayDate(date: Date): string {
+  return format(date, 'EEEE d MMM')
+}
